@@ -21,16 +21,26 @@ class PantallaLavanderia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Generamos una lista de 14 URLs de imágenes de prueba.
-    // En un proyecto real, aquí pondrías las URLs de tus detergentes, lavadoras, etc.
-    final List<String> imagenes = List.generate(
-      14,
-      (index) => 'https://picsum.photos/seed/lavanderia$index/200/200',
-    );
+    // Lista de URLs de las imágenes del repositorio de GitHub.
+    final List<String> imagenes = [
+      'https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/main/Secado.PNG',
+      'https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/main/detergente1.jpg',
+      'https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/empleado1.png',
+      'https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/empleado2.png',
+      'https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/empleado3.png',
+      'https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/imagen.jpg',
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/jabon.png",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/lavado.png",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/lavanderia.jpg",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/logo.jpg",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/tintoreria.png",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/asistente-ejecutivo%20(1).jpg",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/jabon.png",
+      "https://raw.githubusercontent.com/JesusCampoya0452/Imagenes-para-Flutter-6j-11-de-febrero-2026/refs/heads/main/jabon.png",
+    ];
 
     return Scaffold(
-      // Un fondo ligeramente gris oscuro hace que los contenedores blancos resalten (como en tu imagen)
-      backgroundColor: const Color(0xFF2A2D34), 
+      backgroundColor: const Color(0xFF2A2D34),
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         title: const Text(
@@ -40,36 +50,46 @@ class PantallaLavanderia extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0), // Un pequeño margen alrededor de la cuadrícula
+        padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
-          itemCount: 14, // El total de imágenes (7 filas x 2 columnas = 14)
+          itemCount: imagenes.length, // Usamos la longitud de nuestra lista de imágenes
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Especificamos que queremos 2 columnas
-            crossAxisSpacing: 8.0, // Espacio horizontal entre columnas
-            mainAxisSpacing: 8.0, // Espacio vertical entre filas
-            childAspectRatio: 0.8, // Ajusta la altura del contenedor. Cámbialo si se ve muy estirado
+            crossAxisCount: 2,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
+            childAspectRatio: 0.8,
           ),
           itemBuilder: (context, index) {
-            // Este es el "Contenedor" principal de cada tarjeta
             return Container(
               color: Colors.white,
               child: Column(
                 children: [
-                  // 1. LA IMAGEN
-                  // Expanded hace que la imagen tome todo el espacio disponible sobrante arriba
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.network(
                         imagenes[index],
-                        fit: BoxFit.contain, // Contain asegura que la imagen no se recorte
+                        fit: BoxFit.contain,
+                        // Añadimos un loadingBuilder para ver un indicador de carga
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                        // Añadimos un errorBuilder para mostrar un icono si la imagen no carga
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.error, color: Colors.red, size: 50);
+                        },
                       ),
                     ),
                   ),
-                  
-                  // 2. LAS 3 FILAS EN LA PARTE INFERIOR (Usando Row como pediste)
-                  
-                  // Fila 1: Título
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -79,24 +99,19 @@ class PantallaLavanderia extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
-                  // Fila 2: Subtítulo ("Hola" como en tu imagen)
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Hola'),
+                      Text('Lavanderia Jesus'),
                     ],
                   ),
-                  
-                  // Fila 3: Estrellitas
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.star, color: Colors.black),
                     ],
                   ),
-                  
-                  const SizedBox(height: 8), // Un pequeño espacio al final para que no quede pegado al borde
+                  const SizedBox(height: 8),
                 ],
               ),
             );
